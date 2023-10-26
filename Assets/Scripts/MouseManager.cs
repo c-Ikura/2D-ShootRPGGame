@@ -10,13 +10,8 @@ namespace ShootGame
 
         private void Start()
         {
-
-        }
-        private void Update()
-        {
             SwitchCursorSprite();
         }
-
         private void SwitchCursorSprite()
         {
             Cursor.SetCursor(shootCursor, Vector2.zero, CursorMode.Auto);

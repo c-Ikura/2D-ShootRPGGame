@@ -23,7 +23,7 @@ namespace ShootGame
 
         private void SetAnimator()
         {
-            playerAnim.SetFloat("InputX", Mathf.Abs(playerController.playerRb.velocity.x));
+            playerAnim.SetFloat("InputX", Mathf.Abs(playerController.horizontal));
             playerAnim.SetBool("isSame", playerController.isSame);
         }
     }

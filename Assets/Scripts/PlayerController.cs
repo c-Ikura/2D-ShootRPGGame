@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using ShootGame.Gun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace ShootGame
@@ -7,25 +6,32 @@ namespace ShootGame
     public class PlayerController : MonoBehaviour
     {
         [HideInInspector] public Rigidbody2D playerRb;
-        private Gun_Musket gun;
+        private GunContriller gun;
         private PlayerInputControl inputControl;
-        public int speedRang;
-        public float a;//加速度
-        public bool isSame;
 
+        public int speedRang;
+
+        public float a;//加速度
+        public float g;//重力加速度
+        public float horizontal;
+
+        public bool isSame;
+       
         private void Awake()
         {
             inputControl = new PlayerInputControl();
             playerRb = GetComponent<Rigidbody2D>();
-            gun = GetComponentInChildren<Gun_Musket>();
+            gun = GetComponentInChildren<GunContriller>();
         }
         private void Start()
         {
+            EventCenter.OnSwitchGun();
         }
         private void OnEnable()
         {
             inputControl.Enable();
         }
+
         private void OnDisable()
         {
             inputControl.Disable();
@@ -35,12 +41,14 @@ namespace ShootGame
         {
             Movement();
             Aim();
+            SetGravity();
+            SwitchGun();
         }
         //移动
         private void Movement()
         {
-            var horizontal = inputControl.Game.Move.ReadValue<float>();
-
+            horizontal = inputControl.Game.Move.ReadValue<float>();
+            
 
             playerRb.velocity = new Vector2(Mathf.Clamp(playerRb.velocity.x, -speedRang, speedRang), playerRb.velocity.y);
 
@@ -65,7 +73,30 @@ namespace ShootGame
             }
 
         }
-
+        //重力
+        private void SetGravity()
+        {
+            if (playerRb.velocity.y < 0)
+            {
+                playerRb.velocity = Vector2.MoveTowards(playerRb.velocity, new Vector2(playerRb.velocity.x, -15), g * Time.deltaTime);
+            }
+            if (playerRb.velocity.y > 0)
+            {
+                playerRb.velocity = Vector2.Lerp(playerRb.velocity, new Vector2(playerRb.velocity.x, 0), g * Time.deltaTime);
+            }
+        }
+        //切换武器
+        private void SwitchGun()
+        {
+            if (Input.GetKeyDown(KeyCode.Alpha1))
+            {
+                gun.SwitchGun(0);
+            }
+            if (Input.GetKeyDown(KeyCode.Alpha2))
+            {
+                gun.SwitchGun(1);
+            }
+        }
         private void Aim()
         {
             GameObject waepon = gun.gameObject;
@@ -103,9 +134,25 @@ namespace ShootGame
                 isSame = false;
             }
 
-            if (Input.GetMouseButton(0))
+
+            if (gun.curGun.isCombinable)
             {
-                gun.Shoot(aimDir);
+                if (Input.GetMouseButton(0))
+                {
+                    gun.curGun.Shoot(mousePos, playerRb);
+                }
+                else
+                {
+                    (gun.curGun as RayGun).isPower = false;
+                }
+            }
+            else
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    gun.curGun.Shoot(mousePos, playerRb);
+
+                }
             }
 
         }
