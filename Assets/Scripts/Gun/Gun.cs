@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using QFramework;
 using UnityEngine;
 using static UnityEngine.RuleTile.TilingRuleOutput;
 
@@ -15,26 +16,28 @@ namespace ShootGame.Gun
         void Shoot(Vector2 shootPos, Rigidbody2D shooterRb);
     }
 
-    public abstract class Gun : MonoBehaviour, IGun
+    public abstract class Gun : ViewController, IGun
     {
         protected RaycastHit2D hitInfo;
         protected LayerMask shootLayer;
         protected Animator gunAnimator;
-
+        protected IBulletModel bulletModel;
+        public BulletInfo curBullet;
         public bool isCombinable;//是否可连发
         public bool canShoot;
 
         public float shootForce;//后坐力
-        private float curShootIntervalTime;//当前射击时间间隔
-        public float shootIntervalTime;//攻击频率
+        [SerializeField] private float curShootIntervalTime;//当前射击时间间隔       
         protected virtual void Awake()
         {
             gunAnimator = GetComponent<Animator>();
+            bulletModel = this.GetModel<IBulletModel>();
         }
         protected virtual void Start()
         {
             canShoot = true;
-            curShootIntervalTime = shootIntervalTime;
+
+            curShootIntervalTime = curBullet.BulletPerSecond;
             shootLayer = 1 << 6;
         }
         protected virtual void Update()
@@ -49,7 +52,7 @@ namespace ShootGame.Gun
                 if (curShootIntervalTime < 0)
                 {
                     canShoot = true;
-                    curShootIntervalTime = shootIntervalTime;
+                    curShootIntervalTime = curBullet.BulletPerSecond;
                 }
             }
         }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using QFramework;
 using UnityEngine;
 
 namespace ShootGame.Gun
@@ -8,7 +9,10 @@ namespace ShootGame.Gun
     {
         protected override void Start()
         {
+            curBullet = bulletModel.GetBulletInfo("pistolBullet");
+
             base.Start();
+
             isCombinable = false;
         }
         protected override void Recoil(Vector2 recoilDir, Rigidbody2D shooterRb)
@@ -20,12 +24,13 @@ namespace ShootGame.Gun
         {
             var dir = (shootPos - (Vector2)transform.position).normalized;
 
-            
+
             if (canShoot)
             {
                 gunAnimator.SetTrigger("Shoot");
 
                 hitInfo = Physics2D.Raycast(transform.position, dir, Mathf.Infinity, shootLayer);
+                (curBullet as IBullet).BulletShoot(shootPos);
                 Recoil(-dir, shooterRb);
                 Debug.DrawLine(transform.position, hitInfo.point, Color.red, 1000);
 
