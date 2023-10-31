@@ -8,6 +8,6 @@ public class Global : Architecture<Global>
 {
     protected override void Init()
     {
-        RegisterModel<IBulletModel>(new BulletModel());
+        throw new System.NotImplementedException();
     }
 }

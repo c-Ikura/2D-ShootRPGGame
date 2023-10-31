@@ -1,59 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-namespace ShootGame
+public class Bullet : MonoBehaviour
 {
-    public interface IBullet
+    public Rigidbody2D bulletRb;
+    public Vector2 dir;
+    private void Awake()
     {
-        void BulletShoot(Vector2 pos);
+        bulletRb = GetComponent<Rigidbody2D>();
     }
 
-    /// <summary>
-    /// 子弹信息类
-    /// </summary>
-
-
-    public class BulletInfo
+    private void OnEnable()
     {
-        public BulletInfo(string name, float bulletPerSecond, float bulletDamage, float attackRange)
-        {
-            Name = name;
-            BulletPerSecond = bulletPerSecond;
-            BulletDamage = bulletDamage;
-            AttackRange = attackRange;
-        }
-        public string Name { get; set; }
-        public float BulletPerSecond { get; set; }//子弹射速
-        public float BulletDamage { get; set; }//子弹伤害
-        public float AttackRange { get; set; }//射程范围
+        bulletRb.AddForce(dir * 10, ForceMode2D.Impulse);
+    }
+    private void OnDisable()
+    {
+        bulletRb.Sleep();
     }
 
-
-    public class PistolBulle : BulletInfo, IBullet
-    {
-        public PistolBulle(string name, float bulletPerSecond, float bulletDamage, float attackRange) : base(name, bulletPerSecond, bulletDamage, attackRange)
-        {
-
-        }
-
-        public void BulletShoot(Vector2 pos)
-        {
-            Debug.Log("射出手枪子弹" + pos);
-        }
-    }
-
-    public class LaserBulle : BulletInfo, IBullet
-    {
-        public LaserBulle(string name, float bulletPerSecond, float bulletDamage, float attackRange) : base(name, bulletPerSecond, bulletDamage, attackRange)
-        {
-
-        }
-
-        public void BulletShoot(Vector2 pos)
-        {
-            Debug.Log("射出激光子弹" + pos);
-        }
-    }
 }
-

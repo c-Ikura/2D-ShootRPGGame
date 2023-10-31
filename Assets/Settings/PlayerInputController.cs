@@ -33,7 +33,7 @@ namespace ShootGame
                     ""name"": ""Move"",
                     ""type"": ""Value"",
                     ""id"": ""bcf22593-1b90-4dd6-927d-6e4561159b78"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Integer"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -43,6 +43,15 @@ namespace ShootGame
                     ""type"": ""Value"",
                     ""id"": ""1d319fef-8e00-488f-aecd-b61ddcb75546"",
                     ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""GunSwitch"",
+                    ""type"": ""Button"",
+                    ""id"": ""f8a1aed8-14af-49f7-8e8a-fdae0ca5b4d9"",
+                    ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -92,6 +101,17 @@ namespace ShootGame
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cfa24560-5eba-485b-b4a9-7ff61d031c30"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""GunSwitch"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -102,6 +122,7 @@ namespace ShootGame
             m_Game = asset.FindActionMap("Game", throwIfNotFound: true);
             m_Game_Move = m_Game.FindAction("Move", throwIfNotFound: true);
             m_Game_Aim = m_Game.FindAction("Aim", throwIfNotFound: true);
+            m_Game_GunSwitch = m_Game.FindAction("GunSwitch", throwIfNotFound: true);
         }
 
         public void Dispose()
@@ -165,12 +186,14 @@ namespace ShootGame
         private List<IGameActions> m_GameActionsCallbackInterfaces = new List<IGameActions>();
         private readonly InputAction m_Game_Move;
         private readonly InputAction m_Game_Aim;
+        private readonly InputAction m_Game_GunSwitch;
         public struct GameActions
         {
             private @PlayerInputControl m_Wrapper;
             public GameActions(@PlayerInputControl wrapper) { m_Wrapper = wrapper; }
             public InputAction @Move => m_Wrapper.m_Game_Move;
             public InputAction @Aim => m_Wrapper.m_Game_Aim;
+            public InputAction @GunSwitch => m_Wrapper.m_Game_GunSwitch;
             public InputActionMap Get() { return m_Wrapper.m_Game; }
             public void Enable() { Get().Enable(); }
             public void Disable() { Get().Disable(); }
@@ -186,6 +209,9 @@ namespace ShootGame
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @GunSwitch.started += instance.OnGunSwitch;
+                @GunSwitch.performed += instance.OnGunSwitch;
+                @GunSwitch.canceled += instance.OnGunSwitch;
             }
 
             private void UnregisterCallbacks(IGameActions instance)
@@ -196,6 +222,9 @@ namespace ShootGame
                 @Aim.started -= instance.OnAim;
                 @Aim.performed -= instance.OnAim;
                 @Aim.canceled -= instance.OnAim;
+                @GunSwitch.started -= instance.OnGunSwitch;
+                @GunSwitch.performed -= instance.OnGunSwitch;
+                @GunSwitch.canceled -= instance.OnGunSwitch;
             }
 
             public void RemoveCallbacks(IGameActions instance)
@@ -217,6 +246,7 @@ namespace ShootGame
         {
             void OnMove(InputAction.CallbackContext context);
             void OnAim(InputAction.CallbackContext context);
+            void OnGunSwitch(InputAction.CallbackContext context);
         }
     }
 }

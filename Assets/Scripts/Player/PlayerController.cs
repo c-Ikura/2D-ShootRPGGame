@@ -1,4 +1,3 @@
-using ShootGame.Gun;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace ShootGame
@@ -6,17 +5,18 @@ namespace ShootGame
     public class PlayerController : MonoBehaviour
     {
         [HideInInspector] public Rigidbody2D playerRb;
-        private GunContriller gun;
+        [SerializeField] private GunContriller gun;
         private PlayerInputControl inputControl;
 
         public int speedRang;
+        public int index;
 
         public float a;//加速度
         public float g;//重力加速度
         public float horizontal;
 
         public bool isSame;
-       
+
         private void Awake()
         {
             inputControl = new PlayerInputControl();
@@ -48,7 +48,7 @@ namespace ShootGame
         private void Movement()
         {
             horizontal = inputControl.Game.Move.ReadValue<float>();
-            
+
 
             playerRb.velocity = new Vector2(Mathf.Clamp(playerRb.velocity.x, -speedRang, speedRang), playerRb.velocity.y);
 
@@ -88,13 +88,18 @@ namespace ShootGame
         //切换武器
         private void SwitchGun()
         {
-            if (Input.GetKeyDown(KeyCode.Alpha1))
+            if (inputControl.Game.GunSwitch.WasPerformedThisFrame())
             {
-                gun.SwitchGun(0);
-            }
-            if (Input.GetKeyDown(KeyCode.Alpha2))
-            {
-                gun.SwitchGun(1);
+                index++;
+                if (index > 1)
+                {
+                    index = 0;
+                }
+                if (index < 0)
+                {
+                    index = 1;
+                }
+                gun.onShiftGun?.Invoke(index);
             }
         }
         private void Aim()
@@ -134,25 +139,9 @@ namespace ShootGame
                 isSame = false;
             }
 
-
-            if (gun.curGun.isCombinable)
+            if (Input.GetMouseButton(0))
             {
-                if (Input.GetMouseButton(0))
-                {
-                    gun.curGun.Shoot(mousePos, playerRb);
-                }
-                else
-                {
-                    (gun.curGun as RayGun).isPower = false;
-                }
-            }
-            else
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    gun.curGun.Shoot(mousePos, playerRb);
-
-                }
+                gun.curGun.Shoot(aimDir);
             }
 
         }

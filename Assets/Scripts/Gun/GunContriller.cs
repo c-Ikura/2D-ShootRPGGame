@@ -1,39 +1,41 @@
-using ShootGame.Gun;
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class GunContriller : MonoBehaviour
 {
-    [SerializeField] private Gun[] guns;
-
-    public Gun curGun;
-    private void Awake()
-    {
-        guns = GetComponentsInChildren<Gun>();    
-    }
+    public IGun curGun;
+    public List<IGun> gunList = new List<IGun>();
+    public Action<int> onShiftGun;
     private void Start()
     {
-        foreach (var gun in guns)
+        var guns = GetComponentsInChildren<IGun>();
+
+        foreach (var item in guns)
         {
-            gun.gameObject.SetActive(false);
+            gunList.Add(item);
         }
 
-        SwitchGun(0);
+        curGun = gunList[0];
     }
 
-    public void SwitchGun(int gunIndex)
+    private void OnEnable()
     {
-        
-        for (int i = 0; i < guns.Length; i++)
+        onShiftGun += ShiftGun;
+    }
+
+    public void ShiftGun(int enableIndex)
+    {
+        if (enableIndex > gunList.Count - 1 || enableIndex < 0)
+            return;
+
+        for (var i = 0; i < gunList.Count; i++)
         {
-            if(i == gunIndex)
+            if (i == enableIndex)
             {
-                curGun = guns[gunIndex];
-                curGun.gameObject.SetActive(true);
-                continue;
+                curGun = gunList[i];
             }
-            guns[i].gameObject.SetActive(false);
         }
     }
 }
