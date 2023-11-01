@@ -167,6 +167,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92c830f27d20d914aab74d2d34699d25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletRb: {fileID: 0}
+  dir: {x: 0.9631374, y: 0.26900998}
 --- !u!114 &1270773470955395545
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -194,7 +196,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2

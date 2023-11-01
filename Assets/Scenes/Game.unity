@@ -986,6 +986,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7751934d41da114f8e7709d7ddd70d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRate: 0.2
+  curAttackRate: 0
+  canShoot: 0
   canHurtLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -1001,6 +1004,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d38240bc890b954c8766a824efdaced, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackRate: 0.5
+  curAttackRate: 0
+  canShoot: 0
   bullet: {fileID: 0}
   shootPoint: {fileID: 181089537}
 --- !u!1001 &5990059591280098837

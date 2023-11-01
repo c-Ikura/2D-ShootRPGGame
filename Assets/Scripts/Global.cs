@@ -8,6 +8,6 @@ public class Global : Architecture<Global>
 {
     protected override void Init()
     {
-        throw new System.NotImplementedException();
+        RegisterSystem<IGunSystem>(new GunSystem());
     }
 }

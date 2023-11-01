@@ -4,19 +4,20 @@ using Unity.Mathematics;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
-public class HandGun : MonoBehaviour, IGun
+public class HandGun : Gun
 {
     public Bullet bullet;
     public Transform shootPoint;
 
-    private void Awake()
+    private void Start()
     {
-        bullet = Resources.Load<Bullet>("Bullet_Single");
+        
+        bullet = Resources.Load<Bullet>("Bullet_Single");       
     }
-    public void Shoot(Vector2 shootPos)
+
+    protected override void GunShoot(Vector2 shootDir)
     {
         var obj = Instantiate(bullet, shootPoint.position, transform.rotation);
-        bullet.dir = shootPos;
-
+        bullet.dir = shootDir;
     }
 }
