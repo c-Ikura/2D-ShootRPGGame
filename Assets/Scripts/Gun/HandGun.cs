@@ -17,7 +17,7 @@ public class HandGun : Gun
 
     protected override void GunShoot(Vector2 shootDir)
     {
-        var obj = Instantiate(bullet, shootPoint.position, transform.rotation);
-        bullet.dir = shootDir;
+        var obj = Instantiate(bullet, shootPoint.position, shootPoint.rotation);
+       
     }
 }

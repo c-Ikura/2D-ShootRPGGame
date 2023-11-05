@@ -9,5 +9,7 @@ public class Global : Architecture<Global>
     protected override void Init()
     {
         RegisterSystem<IGunSystem>(new GunSystem());
+        RegisterSystem<ITimeSystem>(new TimeSystem());
+        RegisterModel<IGunConfigModel>(new GunConfigModel());
     }
 }

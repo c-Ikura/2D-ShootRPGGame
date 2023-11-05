@@ -1,11 +1,13 @@
+using QFramework;
 using UnityEngine;
 using UnityEngine.InputSystem;
 namespace ShootGame
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : ViewController
     {
         [HideInInspector] public Rigidbody2D playerRb;
         [SerializeField] private GunContriller gun;
+        private IGunSystem gunSystem;
         private PlayerInputControl inputControl;
 
         public int speedRang;
@@ -19,6 +21,7 @@ namespace ShootGame
 
         private void Awake()
         {
+            gunSystem = this.GetSystem<IGunSystem>();
             inputControl = new PlayerInputControl();
             playerRb = GetComponent<Rigidbody2D>();
             gun = GetComponentInChildren<GunContriller>();
@@ -139,7 +142,7 @@ namespace ShootGame
                 isSame = false;
             }
 
-            if (Input.GetMouseButton(0))
+            if (Input.GetMouseButton(0)&&gunSystem.curGun.gunState.Value == GunState.Idel)
             {
                 gun.curGun.Shoot(aimDir);
             }

@@ -14,7 +14,7 @@ public class Bullet : MonoBehaviour
 
     private void OnEnable()
     {
-        bulletRb.AddForce(dir * 10, ForceMode2D.Impulse);
+        bulletRb.AddForce(transform.up * 10, ForceMode2D.Impulse);
     }
     private void OnDisable()
     {

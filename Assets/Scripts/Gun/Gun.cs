@@ -19,7 +19,6 @@ public enum GunState
 }
 public class GunInfo
 {
-
     public BindableProperty<int> bulletCount { get; set; }
     public BindableProperty<string> name { get; set; }
     public BindableProperty<GunState> gunState { get; set; }
@@ -32,8 +31,6 @@ public abstract class Gun :ViewController,IGun
 
     public float attackRate;//¹¥»÷ÆµÂÊ
     public float curAttackRate;
-
-    public bool canShoot;
     public string gunName { get; set; }
 
     protected virtual void Awake()
@@ -42,31 +39,12 @@ public abstract class Gun :ViewController,IGun
         gunName = GetType().Name;
     }
 
-    protected void Update()
-    {
-        if (canShoot)
-        {
-
-        }
-        else
-        {
-            curAttackRate -=Time.deltaTime;
-            if(curAttackRate < 0 )
-            {
-                curAttackRate = attackRate;
-                canShoot = true;
-            }
-        }
-    }
     protected abstract void GunShoot(Vector2 shootDir);
     
     public virtual void Shoot(Vector2 shootPoDir)
     {
-        if(canShoot)
-        {
-            GunShoot(shootPoDir);
-            canShoot =false;
-        }        
+        GunShoot(shootPoDir);
+        this.SendCommand(ShootCommand.Single);
     }
     
 }
