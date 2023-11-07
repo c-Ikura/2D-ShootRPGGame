@@ -26,6 +26,8 @@ public class GunInfo
 
 public abstract class Gun :ViewController,IGun
 {
+    [SerializeField]private Animator gunAnim;
+
     public IGunSystem gunSystem;
     public GunInfo gunInfo;
 
@@ -37,12 +39,17 @@ public abstract class Gun :ViewController,IGun
     {
         gunSystem = this.GetSystem<IGunSystem>();
         gunName = GetType().Name;
-    }
 
+        gunAnim = GetComponent<Animator>();
+    }
+    private void Update()
+    {
+    }
     protected abstract void GunShoot(Vector2 shootDir);
     
     public virtual void Shoot(Vector2 shootPoDir)
     {
+        
         GunShoot(shootPoDir);
         this.SendCommand(ShootCommand.Single);
     }

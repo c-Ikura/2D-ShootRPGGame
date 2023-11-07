@@ -10,6 +10,7 @@ public class GunContriller : ViewController
     public IGunSystem gunSystem;
     public Dictionary<string,IGun> gunDic = new Dictionary<string,IGun>();
     public Action<int> onShiftGun;
+
     private void Start()
     {
         var guns = GetComponentsInChildren<IGun>();

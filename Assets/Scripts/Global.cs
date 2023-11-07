@@ -1,15 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using QFramework;
-using ShootGame;
-using UnityEngine;
 
-public class Global : Architecture<Global>
+namespace ShootGame
 {
-    protected override void Init()
+    public class Global : Architecture<Global>
     {
-        RegisterSystem<IGunSystem>(new GunSystem());
-        RegisterSystem<ITimeSystem>(new TimeSystem());
-        RegisterModel<IGunConfigModel>(new GunConfigModel());
+        protected override void Init()
+        {
+            RegisterSystem<IGunSystem>(new GunSystem());
+            RegisterSystem<ITimeSystem>(new TimeSystem());
+            RegisterSystem<IGameObjectPool>(new GameObjectPool());
+            RegisterModel<IGunConfigModel>(new GunConfigModel());
+
+        }
     }
 }
+

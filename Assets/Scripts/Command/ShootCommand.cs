@@ -19,7 +19,7 @@ public class ShootCommand : AbstractCommand
         if(curGun.name != "HandGun")
         {
             curGun.bulletCount.Value--;
-        }        
+        }
         curGun.gunState.Value = GunState.Shooting;
 
         //Éä»÷¼ä¸ô
